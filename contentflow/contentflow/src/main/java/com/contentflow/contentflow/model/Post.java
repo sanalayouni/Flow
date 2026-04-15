@@ -32,6 +32,9 @@ public class Post {
 
     private LocalDateTime scheduledDate;
 
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
