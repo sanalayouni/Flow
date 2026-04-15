@@ -1,64 +1,219 @@
-```markdown
-# Quiz Challenge
+# 🚀 ContentFlow — Social Media Content Planner API
 
-Welcome to the **Quiz Challenge**! This is an interactive quiz game created as part of the **NUIT DE L'INFO** challenge. The challenge theme focuses on **The Ocean**. The app provides users with a series of questions related to this theme, offering immediate feedback on their answers.
+## 📌 Overview
+ContentFlow is a backend SaaS application designed to help small businesses, creators, and freelancers plan, organize, and manage their social media content efficiently.
 
-## NUIT DE L'INFO Challenge
+The system provides a structured REST API to create, categorize, and schedule posts, making content management simple and consistent.
 
-This quiz is part of the **NUIT DE L'INFO** event, which is a global challenge where developers participate in coding marathons to build projects based on a specific theme. 
+---
 
-- **Theme**: The Ocean
-  - The quiz questions are designed to educate users about environmental issues affecting the oceans and the climate, such as rising sea levels, pollution, marine life, and the importance of preserving aquatic ecosystems.
+## 🎯 Problem
+Small businesses often struggle with:
 
+- Lack of content organization  
+- Inconsistent posting schedules  
+- Difficulty planning ahead  
+- Managing ideas across multiple platforms  
 
-## Features
+➡️ This leads to poor engagement and a weak online presence.
 
-- **Multiple Choice Questions**: Users are presented with multiple-choice questions.
-- **Instant Feedback**: Upon answering, users receive immediate feedback with explanations.
-- **Custom Alerts**: Alerts are displayed with color-coded messages (success or error) for better user experience.
+---
 
+## 💡 Solution
+ContentFlow provides a simple and scalable backend system that allows users to:
 
-## How It Works
+- Organize content using categories  
+- Create and manage posts with rich metadata  
+- Schedule content in advance  
+- Maintain a consistent content strategy  
+- Filter and search through content efficiently  
 
-1. **Question Display**: The quiz presents one question at a time, with multiple choice answers.
-2. **Answer Submission**: Users select an answer and submit it.
-3. **Feedback**: Upon submission, users receive feedback:
-   - **"Correct!"** if the answer is right.
-   - **"Wrong! [Explanation]"** if the answer is incorrect, with an explanation provided.
+---
 
+## 👥 Target Users
 
-## Technology Used
+- Small businesses  
+- Freelancers  
+- Personal brands  
+- Social media managers  
 
-- **HTML**: For the basic structure of the quiz.
-- **CSS**: For styling the quiz and creating custom alert boxes with color-coded feedback.
-- **JavaScript**: For quiz functionality and handling user interactions.
-- **Responsive Design**: The application adapts to different screen sizes for optimal user experience on both desktop and mobile.
+---
 
-## How to Use
+## ⚙️ Features (MVP)
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-username/quiz-challenge.git
-   ```
+### 🔐 Authentication
+- Register user  
+- Login user (JWT-based)  
 
-2. Open the `index.html` file in your browser to start the quiz.
-   
-3. Answer the questions by selecting an option. After each submission, you will receive immediate feedback.
+### 🗂️ Category Management
+- Create category  
+- View all categories  
+- View single category  
+- Update category  
+- Delete category (with post validation)  
 
-4. You can proceed to the next question until the quiz ends.
+### 📝 Post Management
+- Create post  
+- Update post  
+- Delete post (soft delete)  
+- View all posts (with pagination)  
+- View single post  
 
-## Example
+### 📅 Scheduling
+- Assign scheduled date to posts  
+- Manage post status:
+  - DRAFT  
+  - SCHEDULED  
+  - PUBLISHED  
+  - ARCHIVED  
 
-Here's an example of how the quiz looks:
+### 🔍 Filtering & Pagination
+- Filter posts by status  
+- Filter posts by category  
+- Paginated responses on all list endpoints  
 
-- **Question**: What is the capital of France?
-  - Option A: Berlin
-  - Option B: Madrid
-  - Option C: Paris
-  - Option D: Rome
+---
 
-  **Answer**: Paris
+## 🔄 Application Flow
 
-- After submission, a green alert will pop up saying "Correct!".
-- If the answer was incorrect, a red alert would display "Wrong! [Explanation]".
+1. User registers and logs in → receives JWT token  
+2. User creates categories  
+3. User creates posts under categories  
+4. User sets post status and schedule date  
+5. User filters and manages posts  
+6. User publishes or archives posts  
+
+---
+
+## 🧱 Tech Stack
+
+| Layer        | Technology                     |
+|-------------|------------------------------|
+| Backend     | Spring Boot 3.x              |
+| Language    | Java 17+                     |
+| Database    | MySQL 8                      |
+| ORM         | Spring Data JPA / Hibernate  |
+| Security    | Spring Security + JWT        |
+| Validation  | Jakarta Bean Validation      |
+| Docs        | SpringDoc OpenAPI (Swagger)  |
+| Testing     | JUnit 5 + Mockito            |
+| Tools       | Postman, Git, Maven          |
+
+---
+
+## 🏗️ Project Structure
+
+```
+com.contentflow
+│
+├── controller/
+├── service/
+├── repository/
+├── model/
+├── dto/
+│   ├── request/
+│   └── response/
+├── mapper/
+├── exception/
+├── security/
+└── config/
+```
+
+---
+
+## 📡 API Endpoints
+
+### 🔐 Auth
+
+| Method | Endpoint        | Description        |
+|--------|---------------|--------------------|
+| POST   | /auth/register | Register new user  |
+| POST   | /auth/login    | Login & get JWT    |
+
+---
+
+### 🗂️ Categories
+
+| Method | Endpoint            | Description            |
+|--------|--------------------|------------------------|
+| POST   | /categories        | Create category        |
+| GET    | /categories        | List all categories    |
+| GET    | /categories/{id}   | Get single category    |
+| PUT    | /categories/{id}   | Update category        |
+| DELETE | /categories/{id}   | Delete category        |
+
+---
+
+### 📝 Posts
+
+| Method | Endpoint        | Description                |
+|--------|---------------|----------------------------|
+| POST   | /posts         | Create post                |
+| GET    | /posts         | List posts (paginated)     |
+| GET    | /posts/{id}    | Get single post            |
+| PUT    | /posts/{id}    | Update post                |
+| DELETE | /posts/{id}    | Soft delete post           |
+
+---
+
+### 🔍 Filters (Query Parameters)
+
+| Parameter  | Example                          |
+|------------|----------------------------------|
+| status     | /posts?status=DRAFT              |
+| categoryId | /posts?categoryId=1              |
+| page       | /posts?page=0&size=10            |
+
+---
+
+## 🗃️ Database Design
+
+### User
+
+| Column     | Type         | Constraints              |
+|------------|-------------|--------------------------|
+| id         | BIGINT      | PK, AUTO_INCREMENT       |
+| username   | VARCHAR(50) | NOT NULL, UNIQUE         |
+| email      | VARCHAR(100)| NOT NULL, UNIQUE         |
+| password   | VARCHAR(255)| NOT NULL                 |
+| created_at | TIMESTAMP   | NOT NULL                 |
+| updated_at | TIMESTAMP   | NOT NULL                 |
+
+---
+
+### Category
+
+| Column     | Type         | Constraints                 |
+|------------|-------------|-----------------------------|
+| id         | BIGINT      | PK, AUTO_INCREMENT          |
+| name       | VARCHAR(100)| NOT NULL                    |
+| user_id    | BIGINT      | FK → User(id), NOT NULL     |
+| created_at | TIMESTAMP   | NOT NULL                    |
+| updated_at | TIMESTAMP   | NOT NULL                    |
+
+---
+
+### Post
+
+| Column          | Type         | Constraints                          |
+|-----------------|-------------|--------------------------------------|
+| id              | BIGINT      | PK, AUTO_INCREMENT                   |
+| title           | VARCHAR(200)| NOT NULL                             |
+| content         | TEXT        | NOT NULL                             |
+| status          | ENUM        | DRAFT, SCHEDULED, PUBLISHED, ARCHIVED|
+| scheduled_date  | TIMESTAMP   | NULLABLE                             |
+| user_id         | BIGINT      | FK → User(id), NOT NULL              |
+| category_id     | BIGINT      | FK → Category(id), NULLABLE          |
+| created_at      | TIMESTAMP   | NOT NULL                             |
+| updated_at      | TIMESTAMP   | NOT NULL                             |
+
+---
+
+## 📌 Status
+🚧 In Development (MVP Phase)
+
+---
+
+## 👨‍💻 Author
+Sana Layouni
 
